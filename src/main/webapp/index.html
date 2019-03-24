@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+</head>
+<body>
+
+<div style="padding:5px;">
+    <div class="txt" style="padding-top:3px;" > <p1><font size="5">全部主题<< </font></p1>
+        <hr class="hr1" />
+    </div>
+    <div class="operation_button">
+        <a href="#" title="新建" onclick="to('adduser.html')">新建</a>
+        <a href="#" title="新建" onclick="to('exportUser.html')">导入</a>
+        <a href="#" title="查询" onclick="searchAll()">查询</a>
+    </div>
+    <div class="search_input">
+        <ul class="txt">
+            <li>用户名称：
+                <input type="text" size="30" id="n" />
+            </li>
+        </ul>
+    </div>
+    <div>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table_list" >
+            <thead>
+            <tr>
+                <th width="15%">序号</th>
+                <th width="15%">主题</th>
+                <th width="15%">投票</th>
+                <th width="15%">查看</th>
+                <th width="10%">创建时间</th>
+            </tr>
+            </thead>
+            <tbody id="tid">
+
+            </tbody>
+        </table>
+    </div>
+    <div class="paginationInfo">
+        <!-- 共59条记录&nbsp;每页10条&nbsp;第1页/共5页
+      <a href="#" title="首页">&laquo;首页</a><a href="#" title="上一页">&laquo; 上一页</a> <a href="#" class="number current" title="1">1</a> <a href="#" class="number" title="2">2</a> <a href="#" class="number" title="3">3</a> <a href="#" class="number" title="4">4</a> <a href="#" title="下一页">下一页&raquo;</a><a href="#" title="末页">末页&raquo;</a> 转到&nbsp;
+      <input value="1" size="2" />
+      &nbsp;页<a href="#">GO</a>
+      </li> -->
+        <div>当前页</div><div class="currentPage">1</div>
+        <div class="M-box3"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+
+        loadData(1);
+    })
+
+    function loadData(page){
+        $.ajax({
+            type:"get",
+            url:"/votesys/subject/list.do",
+            dataType:"json",
+            success:function(data){
+                if(data.code == 1){
+
+                    var infos = data.info;
+                    $("#tid").empty();
+                    $(infos).each(function(){
+                        var html = '<tr>';
+                        html += '<td>' + this.sid + '</td>';
+                        html += '<td>';
+                        html += '<a href="#">' + this.subject + '</a>';
+                        html += '</td>';
+                        html += '<td>' + this.toupiao + '</td>';
+                        html += '<td>' + this.chakan + '</td>';
+                        html += '<td>' + this.createDate + '</td>';
+
+                        html += '</tr>';
+
+                        $("#tid").append($(html));
+                    })
+                } else {
+                    alert(data.info);
+                }
+
+            }, //success
+            error:function () {
+                alert("请求失败");
+            }
+
+        }) //ajax
+    }
+
+</script>
+
+</body>
+
+</html>
